@@ -3,9 +3,11 @@ import { PlaceProps } from "@/components/place";
 import { Places } from "@/components/places";
 import { api } from "@/services/api";
 import { useEffect, useState } from "react";
-import { Alert, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-import * as Location from "expo-location";
+import { Alert, Text, View } from "react-native";
+import MapView, { Callout, Marker } from "react-native-maps";
+import { colors } from "@/styles/colors";
+import { fontFamily } from "@/styles/font-family";
+import { router } from "expo-router";
 
 //https://qrfy.com/pt
 
@@ -94,6 +96,7 @@ export default function Home() {
           }}
           image={require("@/assets/location.png")}
         />
+
         {markets.map((item) => (
           <Marker
             key={item.id}
@@ -102,8 +105,32 @@ export default function Home() {
               latitude: item.latitude,
               longitude: item.longitude,
             }}
-            image={require('@/assets/pin.png')}
-          />
+            image={require("@/assets/pin.png")}
+          >
+            <Callout onPress={() => router.navigate(`/market/${item.id}`)}>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: colors.gray[600],
+                    fontFamily: fontFamily.medium,
+                  }}
+                >
+                  {item.name}
+                </Text>
+
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: colors.gray[600],
+                    fontFamily: fontFamily.regular,
+                  }}
+                >
+                  {item.address}
+                </Text>
+              </View>
+            </Callout>
+          </Marker>
         ))}
       </MapView>
       <Places data={markets} />
